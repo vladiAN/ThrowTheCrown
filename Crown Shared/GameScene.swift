@@ -68,6 +68,7 @@ class GameScene: SKScene {
         let restoreTimerInterval = 2.0
         Timer.scheduledTimer(withTimeInterval: restoreTimerInterval, repeats: false) { [weak self] _ in
             self?.restoreKingTextures()
+            self?.exchangeKingPositions()
         }
     }
     
