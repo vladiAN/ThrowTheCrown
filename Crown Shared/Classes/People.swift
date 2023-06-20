@@ -1,5 +1,5 @@
 //
-//  King.swift
+//  People.swift
 //  Crown
 //
 //  Created by Vladislav Andrushok on 19.06.2023.
@@ -9,14 +9,14 @@ import Foundation
 
 import SpriteKit
 
-class King: SKSpriteNode {
+class People: SKSpriteNode {
     static let defaultTexture = SKTexture(imageNamed: "not_king")
-    static let kingTexture = SKTexture(imageNamed: "king")
+    static let princeTexture = SKTexture(imageNamed: "king")
     
     var isChanged = false
     
     init() {
-        super.init(texture: King.defaultTexture, color: .clear, size: King.defaultTexture.size())
+        super.init(texture: People.defaultTexture, color: .clear, size: People.defaultTexture.size())
         name = "king"
     }
     
@@ -25,12 +25,12 @@ class King: SKSpriteNode {
     }
     
     func changeTexture() {
-        texture = King.kingTexture
+        texture = People.princeTexture
         isChanged = true
     }
     
     func restoreTexture() {
-        texture = King.defaultTexture
+        texture = People.defaultTexture
         isChanged = false
     }
 }

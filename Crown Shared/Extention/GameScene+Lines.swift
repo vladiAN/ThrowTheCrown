@@ -16,9 +16,10 @@ extension GameScene {
         for i in 0..<numberOfLines {
             let line = LineNode(rectOfSize: CGSize(width: size.height / 1.5, height: lineHeight))
             let lineYPosition = size.height / 2.3 + CGFloat(i - 1) * lineSpacing
+            line.name = "kingLine"
             line.position = CGPoint(x: startX, y: lineYPosition)
             addChild(line)
-            createKings(on: line)
+            createPeople(on: line)
         }
     }
 }
