@@ -31,7 +31,11 @@ extension GameScene {
                     arrangePrinceInCenter()
                 }
             }
+        else if restartButton.contains(touchLocation) {
+                        restartCrown()
+                    }
         }
+        
     }
 
     

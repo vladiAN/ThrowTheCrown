@@ -88,9 +88,10 @@ extension GameScene {
             let princeXPosition = startX + CGFloat(index) * princeSpacing
             prince.zPosition = CGFloat(index + 1)
             let moveAction = SKAction.move(to: CGPoint(x: princeXPosition, y: centerPoint.y), duration: 0.3)
-            let scaleAction = SKAction.scale(to: 0.4, duration: 0.3)
+            let scaleAction = SKAction.scale(to: 0.3, duration: 0.3)
             let sequenceAction = SKAction.sequence([moveAction, scaleAction])
             prince.run(sequenceAction)
+            createPhysicsForPrince(position: prince.position)
         }
         
         for people in crowdOfPeople {
@@ -104,6 +105,32 @@ extension GameScene {
                 line.removeFromParent()
             }
         }
+        
+    }
+    
+    func createPhysicsForPrince(position: CGPoint) {
+        let nodeFixationCrown = SKNode()
+        let nodeStoppedCrown = SKNode()
+        
+        let nodeFixationSize = CGSize(width: 10, height: 50)
+        let nodeStoppedSize = CGSize(width: crown.frame.width, height: 5)
+                
+        let nodeFixationPhysicsBody = SKPhysicsBody(rectangleOf: nodeFixationSize)
+        nodeFixationPhysicsBody.affectedByGravity = false
+        nodeFixationPhysicsBody.isDynamic = false
+        nodeFixationCrown.physicsBody = nodeFixationPhysicsBody
+        
+        let nodeStoppedPhysicsBody = SKPhysicsBody(rectangleOf: nodeStoppedSize)
+        nodeStoppedPhysicsBody.affectedByGravity = false
+        nodeStoppedPhysicsBody.isDynamic = false
+        nodeStoppedCrown.physicsBody = nodeStoppedPhysicsBody
+        
+        addChild(nodeStoppedCrown)
+//        addChild(nodeFixationCrown)
+        
+        nodeStoppedCrown.position = position
+        nodeFixationCrown.position = CGPoint(x: position.x, y: position.y + nodeFixationCrown.frame.height / 2)
+        print(position.y, position.y + nodeFixationCrown.frame.height / 2)
     }
 
 

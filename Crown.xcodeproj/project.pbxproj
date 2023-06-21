@@ -30,6 +30,7 @@
 		EF7FB8672A40A654002C9680 /* GameScene+Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7FB8652A40A654002C9680 /* GameScene+Lines.swift */; };
 		EF7FB8682A40A654002C9680 /* GameScene+Lines.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7FB8652A40A654002C9680 /* GameScene+Lines.swift */; };
 		EF7FB86B2A41BD66002C9680 /* GameScene+Touches.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7FB86A2A41BD66002C9680 /* GameScene+Touches.swift */; };
+		EF7FB86D2A42F1AB002C9680 /* Slider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7FB86C2A42F1AB002C9680 /* Slider.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		EF7FB8612A40A642002C9680 /* GameScene+Prince.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+Prince.swift"; sourceTree = "<group>"; };
 		EF7FB8652A40A654002C9680 /* GameScene+Lines.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+Lines.swift"; sourceTree = "<group>"; };
 		EF7FB86A2A41BD66002C9680 /* GameScene+Touches.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GameScene+Touches.swift"; sourceTree = "<group>"; };
+		EF7FB86C2A42F1AB002C9680 /* Slider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Slider.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 		EF7FB8602A40A3C3002C9680 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				EF7FB86C2A42F1AB002C9680 /* Slider.swift */,
 				EF7FB85C2A40A3BC002C9680 /* Line.swift */,
 				EF7FB8582A40A053002C9680 /* People.swift */,
 			);
@@ -267,6 +270,7 @@
 				EF7FB8472A3C7D0D002C9680 /* GameScene.swift in Sources */,
 				EF7FB81C2A3C7D0D002C9680 /* GameViewController.swift in Sources */,
 				EF7FB8592A40A053002C9680 /* People.swift in Sources */,
+				EF7FB86D2A42F1AB002C9680 /* Slider.swift in Sources */,
 				EF7FB8662A40A654002C9680 /* GameScene+Lines.swift in Sources */,
 				EF7FB8622A40A642002C9680 /* GameScene+Prince.swift in Sources */,
 				EF7FB81A2A3C7D0D002C9680 /* AppDelegate.swift in Sources */,

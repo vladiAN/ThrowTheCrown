@@ -21,8 +21,13 @@ class GameScene: SKScene {
     let kingSpacing: CGFloat = 55
     let scaleFactor: CGFloat = 0.08
     
-    var crownImpulseXSlider: UISlider!
-    var crownImpulseYSlider: UISlider!
+    let crownImpulseXSlider = Slider(length: 130, isHorizontal: false)
+    let crownImpulseYSlider = Slider(length: 130, isHorizontal: false)
+    let crownRotationSlider = Slider(length: 100, isHorizontal: true)
+    var impulseVector: CGVector = .zero
+    
+    var restartButton: SKSpriteNode!
+    
     
     override func didMove(to view: SKView) {
         self.scaleMode = .aspectFill
@@ -34,6 +39,8 @@ class GameScene: SKScene {
         startRandomTextureTimer()
         addCrownImpulseXSlider()
         addCrownImpulseYSlider()
+        addCrownRotationSlider()
+        addRestartButton()
     }
     
     func setupBackground() {
@@ -53,7 +60,7 @@ class GameScene: SKScene {
     
     func addCrown() {
         crown = SKSpriteNode(imageNamed: "crown")
-        crown.setScale(0.15)
+        crown.setScale(0.13)
         crown.position = CGPoint(x: frame.midX * 1.4, y: frame.midY)
         addChild(crown)
         
@@ -83,49 +90,74 @@ class GameScene: SKScene {
     }
     
     func addCrownImpulseXSlider() {
-        let sliderWidth: CGFloat = 150
-        let sliderHeight: CGFloat = 20
-        let sliderXPosition = frame.midX * 1.7
-        let sliderYPosition = frame.midY - sliderWidth / 2
-        let sliderFrame = CGRect(x: sliderXPosition, y: sliderYPosition, width: sliderWidth, height: sliderHeight)
+        let sliderXPosition = frame.midX * 1.85
+        let sliderYPosition = frame.midY + crownImpulseXSlider.frame.height / 1.6
         
-        crownImpulseXSlider = UISlider(frame: sliderFrame)
-        crownImpulseXSlider.minimumValue = 0
-        crownImpulseXSlider.maximumValue = 300
-        crownImpulseXSlider.value = 50
-        crownImpulseXSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi / 2))
-        crownImpulseXSlider.minimumTrackTintColor = UIColor.red
-
-        self.view!.addSubview(crownImpulseXSlider)
+        crownImpulseXSlider.slidingHandler = { data in
+            self.impulseVector.dx = -300 * (data + 1) / 2
+        }
+        
+        crownImpulseXSlider.position = CGPoint(x: sliderXPosition, y: sliderYPosition)
+        addChild(crownImpulseXSlider)
     }
     
-    func addCrownImpulseYSlider() { //DRY????
-        let sliderWidth: CGFloat = 150
-        let sliderHeight: CGFloat = 20
-        let sliderXPosition = frame.midX * 1.7
-        let sliderYPosition = frame.midY + sliderWidth / 2
-        let sliderFrame = CGRect(x: sliderXPosition, y: sliderYPosition, width: sliderWidth, height: sliderHeight)
+    func addCrownImpulseYSlider() {
+        let sliderXPosition = frame.midX * 1.85
+        let sliderYPosition = frame.midY - crownImpulseYSlider.frame.height / 1.6
         
-        crownImpulseYSlider = UISlider(frame: sliderFrame)
-        crownImpulseYSlider.minimumValue = 0
-        crownImpulseYSlider.maximumValue = 300
-        crownImpulseYSlider.value = 50
-        crownImpulseYSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-Double.pi / 2))
-        crownImpulseYSlider.minimumTrackTintColor = UIColor.blue
-
-        self.view!.addSubview(crownImpulseYSlider)
+        crownImpulseYSlider.slidingHandler = { data in
+            self.impulseVector.dy = 300 * (data + 1) / 2
+        }
+        
+        crownImpulseYSlider.position = CGPoint(x: sliderXPosition, y: sliderYPosition)
+        addChild(crownImpulseYSlider)
     }
-    
     
     func impulseApplication() {
-        let impulseVectorX = Int(-crownImpulseXSlider.value)
-        let impulseVectorY = Int(crownImpulseYSlider.value)
-        let impulseVector = CGVector(dx: impulseVectorX, dy: impulseVectorY)
         crown.physicsBody?.applyImpulse(impulseVector)
         crown.physicsBody?.affectedByGravity = true
+        crown.physicsBody?.applyAngularImpulse(0.05)
     }
-
-
+    
+    func addCrownRotationSlider() {
+        let sliderXPosition = frame.midX * 1.65
+        let sliderYPosition = frame.minY + crownRotationSlider.frame.height * 2.7
+        
+        crownRotationSlider.slidingHandler = { data in
+            let maxRotationAngle: CGFloat = .pi
+            let rotationAngle = data * maxRotationAngle
+            
+            self.crown.zRotation = rotationAngle
+        }
+        
+        crownRotationSlider.position = CGPoint(x: sliderXPosition, y: sliderYPosition)
+        addChild(crownRotationSlider)
+        
+        crownRotationSlider.scrollCenter.position.x = 0
+    }
+    
+    
+    func addRestartButton() {
+        restartButton = SKSpriteNode(imageNamed: "restart_button")
+        restartButton.position = CGPoint(x: frame.midX * 1.4, y: frame.midY - crown.frame.height)
+        restartButton.size = CGSize(width: 50, height: 50)
+        restartButton.zPosition = 10
+        addChild(restartButton)
+    }
+    
+    
+    
+    func restartCrown() {
+        crown.position = CGPoint(x: frame.midX * 1.4, y: frame.midY)
+        crown.zRotation = 0
+        crown.physicsBody?.velocity = .zero
+        crown.physicsBody?.angularVelocity = 0
+        crown.physicsBody?.affectedByGravity = false
+    }
+    
+    
+    
+    
 }
 
 
