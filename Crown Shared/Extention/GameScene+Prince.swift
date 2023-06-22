@@ -79,19 +79,20 @@ extension GameScene {
     func arrangePrinceInCenter() {
         let centerPoint = CGPoint(x: size.width / 4, y: size.height / 2.5)
         let princeSpacing: CGFloat = 90
-
+        
         let totalWidth = CGFloat(princeArr.count - 1) * princeSpacing
-
+        
         let startX = centerPoint.x - totalWidth / 2
-
+        
         for (index, prince) in princeArr.enumerated() {
             let princeXPosition = startX + CGFloat(index) * princeSpacing
             prince.zPosition = CGFloat(index + 1)
             let moveAction = SKAction.move(to: CGPoint(x: princeXPosition, y: centerPoint.y), duration: 0.3)
             let scaleAction = SKAction.scale(to: 0.3, duration: 0.3)
             let sequenceAction = SKAction.sequence([moveAction, scaleAction])
-            prince.run(sequenceAction)
-            createPhysicsForPrince(position: prince.position)
+            prince.run(sequenceAction) {
+                self.createNodeStoppedCrownAbovePrince(prince)
+            }
         }
         
         for people in crowdOfPeople {
@@ -108,31 +109,42 @@ extension GameScene {
         
     }
     
-    func createPhysicsForPrince(position: CGPoint) {
-        let nodeFixationCrown = SKNode()
+    func createNodeStoppedCrownAbovePrince(_ prince: SKSpriteNode) {
         let nodeStoppedCrown = SKNode()
+        let nodeFixationCrown = SKNode()
         
-        let nodeFixationSize = CGSize(width: 10, height: 50)
-        let nodeStoppedSize = CGSize(width: crown.frame.width, height: 5)
-                
-        let nodeFixationPhysicsBody = SKPhysicsBody(rectangleOf: nodeFixationSize)
-        nodeFixationPhysicsBody.affectedByGravity = false
-        nodeFixationPhysicsBody.isDynamic = false
-        nodeFixationCrown.physicsBody = nodeFixationPhysicsBody
+        let nodeStoppedSize = CGSize(width: crown.frame.width + 30, height: 5)
+        nodeStoppedCrown.position = CGPoint(x: prince.position.x, y: prince.position.y + prince.frame.height / 3)
+        nodeStoppedCrown.zPosition = prince.zPosition + 1
+        
+        let nodeFixationSize = CGSize(width: 10, height: crown.frame.height / 1.5)
+        nodeFixationCrown.position = CGPoint(x: prince.position.x, y: nodeStoppedCrown.position.y + nodeStoppedSize.height / 2 + nodeFixationSize.height / 2)
+        nodeFixationCrown.zPosition = prince.zPosition + 1
         
         let nodeStoppedPhysicsBody = SKPhysicsBody(rectangleOf: nodeStoppedSize)
         nodeStoppedPhysicsBody.affectedByGravity = false
         nodeStoppedPhysicsBody.isDynamic = false
         nodeStoppedCrown.physicsBody = nodeStoppedPhysicsBody
+        nodeStoppedCrown.physicsBody?.collisionBitMask = 1
+        nodeStoppedCrown.physicsBody?.restitution = 0.0
+        nodeStoppedCrown.physicsBody?.categoryBitMask = BitMasks.nodeStoppedCrown
+        
+        let nodeFixationPhysicsBody = SKPhysicsBody(rectangleOf: nodeFixationSize)
+        nodeFixationPhysicsBody.affectedByGravity = false
+        nodeFixationPhysicsBody.isDynamic = false
+        nodeFixationCrown.physicsBody = nodeFixationPhysicsBody
+        nodeFixationCrown.physicsBody?.collisionBitMask = 1
+        nodeFixationCrown.physicsBody?.restitution = 0.0
+        nodeFixationCrown.physicsBody?.categoryBitMask = BitMasks.nodeFixationCrown
         
         addChild(nodeStoppedCrown)
-//        addChild(nodeFixationCrown)
+        addChild(nodeFixationCrown)
         
-        nodeStoppedCrown.position = position
-        nodeFixationCrown.position = CGPoint(x: position.x, y: position.y + nodeFixationCrown.frame.height / 2)
-        print(position.y, position.y + nodeFixationCrown.frame.height / 2)
     }
-
-
+    
+    
+    
+    
+    
     
 }
