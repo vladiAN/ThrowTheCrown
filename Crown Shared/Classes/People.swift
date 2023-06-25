@@ -10,7 +10,7 @@ import Foundation
 import SpriteKit
 
 class People: SKSpriteNode {
-    static let defaultTexture = SKTexture(imageNamed: "not_king")
+    static let defaultTexture = SKTexture(imageNamed: "not_king1")
     static let princeTexture = SKTexture(imageNamed: "king")
     
     var isChanged = false
@@ -34,4 +34,5 @@ class People: SKSpriteNode {
         isChanged = false
     }
 }
+
 

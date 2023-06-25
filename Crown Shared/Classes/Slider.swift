@@ -2,10 +2,28 @@ import Foundation
 import SpriteKit
 
 class Slider: SKSpriteNode {
+    
+    enum BackgroundColor {
+            case xSlider
+            case ySlider
+            case rotationSlider
+
+            var color: UIColor {
+                switch self {
+                case .xSlider:
+                    return #colorLiteral(red: 0.9568627451, green: 0.662745098, blue: 0.2156862745, alpha: 1)
+                case .ySlider:
+                    return #colorLiteral(red: 0.937254902, green: 0.2308279684, blue: 0.3821538478, alpha: 1)
+                case .rotationSlider:
+                    return #colorLiteral(red: 0.5411764706, green: 0.2156862745, blue: 0.9568627451, alpha: 1)
+                }
+            }
+        }
+    
     var slidingHandler: (CGFloat) -> () = {pos in}
     var scrollCenter: SKSpriteNode!
     var isHorizontal = false
-    init (length: CGFloat, isHorizontal: Bool) {
+    init (length: CGFloat, isHorizontal: Bool, backgroundColor: BackgroundColor) {
         self.isHorizontal = isHorizontal
         let b: CGFloat = 15
         let a = length
@@ -15,13 +33,14 @@ class Slider: SKSpriteNode {
         self.zPosition = 1
         
         let bg = SKShapeNode(rect: CGRect(x: -shapeSize.width/2, y: -shapeSize.height/2, width: shapeSize.width, height: shapeSize.height), cornerRadius: b/2)
-        bg.strokeColor = .cyan.withAlphaComponent(0.3)
+        bg.name = "background"
+        bg.strokeColor = #colorLiteral(red: 0.1843137255, green: 0.1843137255, blue: 0.1843137255, alpha: 1)
         bg.lineWidth = 1
-        bg.fillColor = .systemCyan.withAlphaComponent(0.3)
+        bg.fillColor = backgroundColor.color
         bg.zPosition = self.zPosition
         addChild(bg)
         
-        let centerTexture = SKTexture(imageNamed: "targetZone")
+        let centerTexture = SKTexture(imageNamed: "ellipseSlider")
         let centerSize = getSizeByHeight(texture: centerTexture, height: 2*b)
         scrollCenter = SKSpriteNode(texture: centerTexture, size: centerSize)
 //        scrollCenter.run(.repeatForever(.rotate(byAngle: 4, duration: 2)))

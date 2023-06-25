@@ -15,30 +15,35 @@ extension GameScene {
         
         let touchLocation = touch.location(in: self)
         
-        if crown.contains(touchLocation) {
+        
+        guard isInteractionEnabled else { return }
+        
+        let tappedKing = peopleArr.first(where: { $0.contains(touchLocation) && !tappedKings.contains($0) })
+        
+        if let king = tappedKing, princeArr.contains(king) {
+            tappedKings.insert(king)
+            king.changeTexture()
+            predictedKingCounter += 1
+            
+            if predictedKingCounter == 3 {
+                arrangePrinceInCenter()
+            }
+        } else if restartButton.contains(touchLocation) {
+            restartCrown()
+        } else if crown.contains(touchLocation) {
             impulseApplication()
-        } else {
-            guard isInteractionEnabled else { return }
             
-            let tappedKing = crowdOfPeople.first(where: { $0.contains(touchLocation) && !tappedKings.contains($0) })
-            
-            if let king = tappedKing, princeArr.contains(king) {
-                tappedKings.insert(king)
-                king.changeTexture()
-                predictedKingCounter += 1
-                
-                if predictedKingCounter == 3 {
-                    arrangePrinceInCenter()
+            if !isPhysicsBodyPrinceCreated {
+                if princeArr.count > 0 {
+                    createNodeStoppedCrownAbovePrince(princeArr.last!)
+                    isPhysicsBodyPrinceCreated = true
                 }
             }
-        else if restartButton.contains(touchLocation) {
-                        restartCrown()
-                    }
         }
+    }
         
     }
 
     
     
     
-}

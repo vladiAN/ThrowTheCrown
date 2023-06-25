@@ -15,9 +15,10 @@ struct BitMasks {
     static let sideStoppers: UInt32 = 8
 }
 
-class GameScene: SKScene, SKPhysicsContactDelegate {
-    var crowdOfPeople: [People] = []
+class GameScene: SKScene {
+    var peopleArr: [People] = []
     var princeArr: [People] = []
+    var peopleTextureNameArr: [String] = []
     var tappedKings: Set<SKSpriteNode> = []
     var crown: SKSpriteNode!
     var predictedKingCounter = 0
@@ -26,15 +27,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let lineSpacing: CGFloat = 120
     let lineHeight: CGFloat = 5
     let kingSpacing: CGFloat = 55
-    let scaleFactor: CGFloat = 0.08
+    let scaleFactor: CGFloat = 0.06
     
-    let crownImpulseXSlider = Slider(length: 130, isHorizontal: false)
-    let crownImpulseYSlider = Slider(length: 130, isHorizontal: false)
-    let crownRotationSlider = Slider(length: 100, isHorizontal: true)
+    let crownImpulseXSlider = Slider(length: 130, isHorizontal: false, backgroundColor: .xSlider)
+    let crownImpulseYSlider = Slider(length: 130, isHorizontal: false, backgroundColor: .ySlider)
+    let crownRotationSlider = Slider(length: 100, isHorizontal: true, backgroundColor: .rotationSlider)
     var impulseVector: CGVector = .zero
     
     var restartButton: SKSpriteNode!
-    
+    var contactTimer: Timer?
+    var isContactOngoing = false
+    var isPhysicsBodyPrinceCreated = false
     
     
     override func didMove(to view: SKView) {
@@ -53,6 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addCrownRotationSlider()
         addRestartButton()
         
+        
     }
     
     func setupBackground() {
@@ -66,7 +70,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func addPrincess() {
         let princess = SKSpriteNode(imageNamed: "princess")
         princess.setScale(0.3)
-        princess.position = CGPoint(x: frame.midX * 1.7, y: frame.midY - princess.frame.height / 4)
+        princess.position = CGPoint(x: frame.midX * 1.6, y: frame.midY - princess.frame.height / 5)
         addChild(princess)
     }
     
@@ -80,6 +84,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         crown.physicsBody?.isDynamic = true
         crown.physicsBody?.affectedByGravity = false
         crown.physicsBody?.collisionBitMask = 0
+        crown.physicsBody?.restitution = 0
         
         createNodeForCrown()
         
@@ -94,7 +99,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let sequenceAction = SKAction.sequence([waitAction, changeTextureAction])
         run(sequenceAction)
         
-        let restoreTimerInterval = 2.0
+        let restoreTimerInterval = 3.0
         let restoreAction = SKAction.wait(forDuration: restoreTimerInterval)
         let restoreTextureAction = SKAction.run { [weak self] in
             self?.restorePeopleTextures()
@@ -112,7 +117,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func addRestartButton() {
         restartButton = SKSpriteNode(imageNamed: "restart_button")
-        restartButton.position = CGPoint(x: frame.midX * 1.4, y: frame.midY - crown.frame.height)
+        restartButton.position = CGPoint(x: frame.midX * 1.4, y: frame.midY - 100)
         restartButton.size = CGSize(width: 50, height: 50)
         restartButton.zPosition = 10
         addChild(restartButton)
@@ -121,6 +126,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func restartCrown() {
         crown.position = CGPoint(x: frame.midX * 1.4, y: frame.midY)
         crown.zRotation = 0
+        crown.zPosition = 10
         crown.physicsBody?.velocity = .zero
         crown.physicsBody?.angularVelocity = 0
         crown.physicsBody?.affectedByGravity = false
@@ -168,14 +174,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         centerFixationCrownNode.physicsBody = centerFixationPhysicsBody
         centerFixationCrownNode.physicsBody?.collisionBitMask = 0
         centerFixationCrownNode.physicsBody?.categoryBitMask = BitMasks.centerFixationCrownNode
+        centerFixationCrownNode.physicsBody?.contactTestBitMask = BitMasks.nodeFixationCrown
         centerFixationCrownNode.position = CGPoint(x: crown.position.x, y: crown.position.y)
         
         addChild(centerFixationCrownNode)
         let jointCenter = SKPhysicsJointFixed.joint(withBodyA: crown.physicsBody!, bodyB: centerFixationCrownNode.physicsBody!, anchor: centerFixationCrownNode.position)
         self.physicsWorld.add(jointCenter)
         
-
-
     }
     
     

@@ -16,23 +16,27 @@ extension GameScene {
         
         for i in 0..<numberOfPeopleInLine {
             let people = People()
-            
+            let peopleTextureName = "not_king\(Int.random(in: 1...2))"
+            peopleTextureNameArr.append(peopleTextureName)
+            people.texture = SKTexture(imageNamed: peopleTextureName)
+                        
             let newSize = CGSize(width: people.size.width * scaleFactor, height: people.size.height * scaleFactor)
             people.scale(to: newSize)
             
             let peopleXPosition = startX + CGFloat(i) * kingSpacing
             let peopleYPosition: CGFloat = 40
+            people.zPosition = 3
             people.position = CGPoint(x: peopleXPosition, y: peopleYPosition)
             line.addChild(people)
             people.move(toParent: self)
             
-            crowdOfPeople.append(people)
+            peopleArr.append(people)
         }
     }
     
     func changeRandomPeopleTextures() {
         let randomPrinceCount = 3
-        let numberOfPeople = crowdOfPeople.count
+        let numberOfPeople = peopleArr.count
         
         var randomIndexes = Set<Int>()
         while randomIndexes.count < randomPrinceCount {
@@ -41,7 +45,7 @@ extension GameScene {
         }
         
         for index in randomIndexes {
-            let prince = crowdOfPeople[index]
+            let prince = peopleArr[index]
             let newTexture = SKTexture(imageNamed: "king")
             prince.texture = newTexture
             princeArr.append(prince)
@@ -49,8 +53,8 @@ extension GameScene {
     }
     
     func restorePeopleTextures() {
-        for people in crowdOfPeople {
-            let originalTexture = SKTexture(imageNamed: "not_king")
+        for (index, people) in peopleArr.enumerated() {
+            let originalTexture = SKTexture(imageNamed: peopleTextureNameArr[index])
             people.texture = originalTexture
         }
     }
@@ -58,13 +62,13 @@ extension GameScene {
     func exchangePeoplePositions() {
         isInteractionEnabled = false
         var arrAct:[SKAction] = []
-        for i in 0 ... crowdOfPeople.count - 1 {
-            var randIndex = Int.random(in: 0 ... crowdOfPeople.count - 1)
+        for i in 0 ... peopleArr.count - 1 {
+            var randIndex = Int.random(in: 0 ... peopleArr.count - 1)
             while randIndex == i {
-                randIndex = Int.random(in: 0 ... crowdOfPeople.count - 1)
+                randIndex = Int.random(in: 0 ... peopleArr.count - 1)
             }
-            let currentPrince = crowdOfPeople[i]
-            let peopleToSwap = crowdOfPeople[randIndex]
+            let currentPrince = peopleArr[i]
+            let peopleToSwap = peopleArr[randIndex]
             arrAct.append(.run {
                 currentPrince.run(.move(to: peopleToSwap.position, duration: 0.3))
                 peopleToSwap.run(.move(to: currentPrince.position, duration: 0.3))
@@ -88,14 +92,13 @@ extension GameScene {
             let princeXPosition = startX + CGFloat(index) * princeSpacing
             prince.zPosition = CGFloat(index + 1)
             let moveAction = SKAction.move(to: CGPoint(x: princeXPosition, y: centerPoint.y), duration: 0.3)
-            let scaleAction = SKAction.scale(to: 0.3, duration: 0.3)
+            let scaleAction = SKAction.scale(to: 0.22, duration: 0.3)
             let sequenceAction = SKAction.sequence([moveAction, scaleAction])
             prince.run(sequenceAction) {
-                self.createNodeStoppedCrownAbovePrince(prince)
             }
         }
         
-        for people in crowdOfPeople {
+        for people in peopleArr {
             if !princeArr.contains(people) {
                 people.removeFromParent()
             }
@@ -107,41 +110,27 @@ extension GameScene {
             }
         }
         
+        
     }
     
+    
     func createNodeStoppedCrownAbovePrince(_ prince: SKSpriteNode) {
-        let nodeStoppedCrown = SKNode()
-        let nodeFixationCrown = SKNode()
         
-        let nodeStoppedSize = CGSize(width: crown.frame.width + 30, height: 5)
-        nodeStoppedCrown.position = CGPoint(x: prince.position.x, y: prince.position.y + prince.frame.height / 3)
-        nodeStoppedCrown.zPosition = prince.zPosition + 1
+        let nodeStoppedWidth: CGFloat = crown.frame.width * 1.2
+        let nodeStoppedCrown = EquilateralTriangleNode(hypotenuseLength: nodeStoppedWidth)
+        nodeStoppedCrown.position = CGPoint(x: prince.position.x, y: prince.position.y + prince.frame.height / 2)
+//        nodeStoppedCrown.zPosition = prince.zPosition + 1
         
-        let nodeFixationSize = CGSize(width: 10, height: crown.frame.height / 1.5)
-        nodeFixationCrown.position = CGPoint(x: prince.position.x, y: nodeStoppedCrown.position.y + nodeStoppedSize.height / 2 + nodeFixationSize.height / 2)
-        nodeFixationCrown.zPosition = prince.zPosition + 1
-        
-        let nodeStoppedPhysicsBody = SKPhysicsBody(rectangleOf: nodeStoppedSize)
+        let nodeStoppedPhysicsBody = SKPhysicsBody(polygonFrom: nodeStoppedCrown.path!)
         nodeStoppedPhysicsBody.affectedByGravity = false
         nodeStoppedPhysicsBody.isDynamic = false
         nodeStoppedCrown.physicsBody = nodeStoppedPhysicsBody
-        nodeStoppedCrown.physicsBody?.collisionBitMask = 1
-        nodeStoppedCrown.physicsBody?.restitution = 0.0
-        nodeStoppedCrown.physicsBody?.categoryBitMask = BitMasks.nodeStoppedCrown
-        
-        let nodeFixationPhysicsBody = SKPhysicsBody(rectangleOf: nodeFixationSize)
-        nodeFixationPhysicsBody.affectedByGravity = false
-        nodeFixationPhysicsBody.isDynamic = false
-        nodeFixationCrown.physicsBody = nodeFixationPhysicsBody
-        nodeFixationCrown.physicsBody?.collisionBitMask = 1
-        nodeFixationCrown.physicsBody?.restitution = 0.0
-        nodeFixationCrown.physicsBody?.categoryBitMask = BitMasks.nodeFixationCrown
+        nodeStoppedCrown.physicsBody?.restitution = 0
+        nodeStoppedCrown.physicsBody?.categoryBitMask = BitMasks.nodeFixationCrown
+        nodeStoppedCrown.physicsBody?.contactTestBitMask = BitMasks.centerFixationCrownNode
         
         addChild(nodeStoppedCrown)
-        addChild(nodeFixationCrown)
-        
     }
-    
     
     
     
