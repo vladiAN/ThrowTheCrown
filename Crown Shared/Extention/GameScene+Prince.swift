@@ -116,11 +116,12 @@ extension GameScene {
     
     func createNodeStoppedCrownAbovePrince(_ prince: SKSpriteNode) {
         
-        let nodeStoppedWidth: CGFloat = crown.frame.width * 1.2
+        let nodeStoppedWidth: CGFloat = crown.frame.width * 1.4
         let nodeStoppedCrown = EquilateralTriangleNode(hypotenuseLength: nodeStoppedWidth)
         nodeStoppedCrown.position = CGPoint(x: prince.position.x, y: prince.position.y + prince.frame.height / 2)
 //        nodeStoppedCrown.zPosition = prince.zPosition + 1
-        
+        nodeStoppedCrown.name = "nodeStoppedCrown"
+        nodeStoppedCrown.alpha = 0
         let nodeStoppedPhysicsBody = SKPhysicsBody(polygonFrom: nodeStoppedCrown.path!)
         nodeStoppedPhysicsBody.affectedByGravity = false
         nodeStoppedPhysicsBody.isDynamic = false

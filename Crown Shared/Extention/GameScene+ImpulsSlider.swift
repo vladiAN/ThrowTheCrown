@@ -34,14 +34,14 @@ extension GameScene {
     }
     
     func addCrownRotationSlider() {
-        let sliderXPosition = frame.midX * 1.65
+        let sliderXPosition = frame.midX * 1.6
         let sliderYPosition = frame.minY + crownRotationSlider.frame.height * 2.7
         
         crownRotationSlider.slidingHandler = { data in
             let maxRotationAngle: CGFloat = .pi
-            let rotationAngle = data * maxRotationAngle
+            self.rotationAngleForCrown = data * maxRotationAngle
             
-            self.crown.zRotation = rotationAngle
+            self.crown.zRotation = self.rotationAngleForCrown
         }
         
         crownRotationSlider.position = CGPoint(x: sliderXPosition, y: sliderYPosition)

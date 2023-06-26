@@ -28,11 +28,10 @@ extension GameScene {
             if predictedKingCounter == 3 {
                 arrangePrinceInCenter()
             }
-        } else if restartButton.contains(touchLocation) {
-            restartCrown()
+        
         } else if crown.contains(touchLocation) {
+            animatePrincess()
             impulseApplication()
-            
             if !isPhysicsBodyPrinceCreated {
                 if princeArr.count > 0 {
                     createNodeStoppedCrownAbovePrince(princeArr.last!)

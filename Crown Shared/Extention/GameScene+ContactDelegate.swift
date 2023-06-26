@@ -28,11 +28,8 @@ extension GameScene: SKPhysicsContactDelegate {
     
     @objc func handleContactTimer() {
         if isContactOngoing {
-            let confetti = SKEmitterNode(fileNamed: "Confetti")!
-            confetti.position = CGPoint(x: frame.midX, y: frame.maxY)
-            confetti.zPosition = 5
-            addChild(confetti)
-            
+            addConfetti()
+            successfulRoll()
         }
     }
 }

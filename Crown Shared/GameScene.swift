@@ -21,6 +21,7 @@ class GameScene: SKScene {
     var peopleTextureNameArr: [String] = []
     var tappedKings: Set<SKSpriteNode> = []
     var crown: SKSpriteNode!
+    var princess: SKSpriteNode!
     var predictedKingCounter = 0
     var isInteractionEnabled = false
     
@@ -32,9 +33,9 @@ class GameScene: SKScene {
     let crownImpulseXSlider = Slider(length: 130, isHorizontal: false, backgroundColor: .xSlider)
     let crownImpulseYSlider = Slider(length: 130, isHorizontal: false, backgroundColor: .ySlider)
     let crownRotationSlider = Slider(length: 100, isHorizontal: true, backgroundColor: .rotationSlider)
+    var rotationAngleForCrown: CGFloat = 0
     var impulseVector: CGVector = .zero
     
-    var restartButton: SKSpriteNode!
     var contactTimer: Timer?
     var isContactOngoing = false
     var isPhysicsBodyPrinceCreated = false
@@ -54,8 +55,6 @@ class GameScene: SKScene {
         addCrownImpulseXSlider()
         addCrownImpulseYSlider()
         addCrownRotationSlider()
-        addRestartButton()
-        
         
     }
     
@@ -68,20 +67,32 @@ class GameScene: SKScene {
     }
     
     func addPrincess() {
-        let princess = SKSpriteNode(imageNamed: "princess")
-        princess.setScale(0.3)
+        let princessTexture = SKTexture(imageNamed: "princess 1")
+        princess = SKSpriteNode(texture: princessTexture)
+        princess.setScaleByHeight(newHeight: 350)
         princess.position = CGPoint(x: frame.midX * 1.6, y: frame.midY - princess.frame.height / 5)
         addChild(princess)
     }
     
+    func animatePrincess() {
+        let princessAnimateTexture = [
+            SKTexture(imageNamed: "princess 1"),
+            SKTexture(imageNamed: "princess 3"),
+            SKTexture(imageNamed: "princess 3"),
+            SKTexture(imageNamed: "princess 1")
+        ]
+        let princessAnimation = SKAction.animate(with: princessAnimateTexture, timePerFrame: 0.1)
+        princess.run(princessAnimation)
+    }
+    
     func addCrown() {
-        crown = SKSpriteNode(imageNamed: "crown")
+        crown = SKSpriteNode(imageNamed: "3crown")
         crown.size = CGSize(width: 60, height: 40)
-        crown.position = CGPoint(x: frame.midX * 1.4, y: frame.midY)
+        crown.position = CGPoint(x: frame.midX * 1.32, y: princess.position.y + crown.frame.height)
         addChild(crown)
         
         crown.physicsBody = SKPhysicsBody(rectangleOf: crown.size)
-        crown.physicsBody?.isDynamic = true
+        crown.physicsBody?.isDynamic = false
         crown.physicsBody?.affectedByGravity = false
         crown.physicsBody?.collisionBitMask = 0
         crown.physicsBody?.restitution = 0
@@ -110,33 +121,30 @@ class GameScene: SKScene {
     }
     
     func impulseApplication() {
+        crown.physicsBody?.isDynamic = true
         crown.physicsBody?.applyImpulse(impulseVector)
         crown.physicsBody?.affectedByGravity = true
         crown.physicsBody?.applyAngularImpulse(0.05)
     }
     
-    func addRestartButton() {
-        restartButton = SKSpriteNode(imageNamed: "restart_button")
-        restartButton.position = CGPoint(x: frame.midX * 1.4, y: frame.midY - 100)
-        restartButton.size = CGSize(width: 50, height: 50)
-        restartButton.zPosition = 10
-        addChild(restartButton)
-    }
-    
     func restartCrown() {
-        crown.position = CGPoint(x: frame.midX * 1.4, y: frame.midY)
-        crown.zRotation = 0
-        crown.zPosition = 10
-        crown.physicsBody?.velocity = .zero
-        crown.physicsBody?.angularVelocity = 0
+        crown.physicsBody?.isDynamic = false
         crown.physicsBody?.affectedByGravity = false
+        crown.zPosition = 10
+        crown.zRotation = rotationAngleForCrown
+        crown.physicsBody?.velocity = CGVector.zero
+        crown.physicsBody?.angularVelocity = 0
+        crown.position = CGPoint(x: frame.midX * 1.32, y: princess.position.y + crown.frame.height)
     }
     
     func createNodeForCrown() {
-                
+        
         let leftStoppedCrownNode = SKNode()
+        leftStoppedCrownNode.name = "stoppedCrownNode"
         let rightStoppedCrownNode = SKNode()
+        rightStoppedCrownNode.name = "stoppedCrownNode"
         let centerFixationCrownNode = SKNode()
+        centerFixationCrownNode.name = "fixationCrownNode"
         
         let stoppedCrownNodeSize = CGSize(width: 10, height: crown.frame.height)
         let centerFixationCrownNodeSize = CGSize(width: crown.frame.width / 2, height: crown.frame.height / 1.5)
@@ -146,7 +154,7 @@ class GameScene: SKScene {
         leftStoppedPhysicsBody.affectedByGravity = false
         leftStoppedPhysicsBody.isDynamic = true
         leftStoppedCrownNode.physicsBody = leftStoppedPhysicsBody
-//        leftStoppedCrownNode.physicsBody?.collisionBitMask = 0
+        //        leftStoppedCrownNode.physicsBody?.collisionBitMask = 0
         leftStoppedCrownNode.physicsBody?.restitution = 0.0
         leftStoppedCrownNode.physicsBody?.categoryBitMask = BitMasks.sideStoppers
         leftStoppedCrownNode.position = CGPoint(x: crown.position.x - crown.frame.width / 2 + stoppedCrownNodeSize.width / 2, y: crown.position.y)
@@ -159,7 +167,7 @@ class GameScene: SKScene {
         rightStoppedPhysicsBody.affectedByGravity = false
         rightStoppedPhysicsBody.isDynamic = true
         rightStoppedCrownNode.physicsBody = rightStoppedPhysicsBody
-//        rightStoppedCrownNode.physicsBody?.collisionBitMask = 0
+        //        rightStoppedCrownNode.physicsBody?.collisionBitMask = 0
         rightStoppedCrownNode.physicsBody?.restitution = 0.0
         rightStoppedCrownNode.physicsBody?.categoryBitMask = BitMasks.sideStoppers
         rightStoppedCrownNode.position = CGPoint(x: crown.position.x + crown.frame.width / 2 - stoppedCrownNodeSize.width / 2, y: crown.position.y)
@@ -183,9 +191,55 @@ class GameScene: SKScene {
         
     }
     
+    func addConfetti() {
+        let confetti = SKEmitterNode(fileNamed: "Confetti")!
+        confetti.position = CGPoint(x: frame.midX, y: frame.maxY)
+        confetti.zPosition = 5
+        addChild(confetti)
+    }
+    
+    func successfulRoll() {
+        let nodesToRemove = children.filter { $0.name == "stoppedCrownNode" || $0.name == "fixationCrownNode" || $0.name == "nodeStoppedCrown" }
+        
+        if let lastPrince = princeArr.last {
+            princeArr.removeLast()
+            let scaleAction = SKAction.fadeAlpha(to: 0.0, duration: 0.5)
+            let removeAction = SKAction.removeFromParent()
+            let sequenceAction = SKAction.sequence([scaleAction, removeAction])
+            
+            lastPrince.run(sequenceAction)
+        }
+        
+        let crownScaleAction = SKAction.fadeAlpha(to: 0.0, duration: 0.5)
+        let removeNodeAction = SKAction.run {
+            nodesToRemove.forEach { $0.removeFromParent() }
+        }
+        let crownRemoveAction = SKAction.removeFromParent()
+        let crownSequenceAction = SKAction.sequence([crownScaleAction, removeNodeAction, crownRemoveAction])
+        
+        crown.run(crownSequenceAction)
+        
+        self.addCrown()
+        if let newPrince = princeArr.last {
+            self.createNodeStoppedCrownAbovePrince(newPrince)
+        }
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        if crown.position.y < 0 {
+            restartCrown()
+        }
+    }
+    
+    
     
 }
 
 
-
+extension SKNode {
+  func setScaleByHeight(newHeight: CGFloat) {
+    let newScale = self.xScale * newHeight/self.frame.height
+    self.setScale(newScale)
+  }
+}
 

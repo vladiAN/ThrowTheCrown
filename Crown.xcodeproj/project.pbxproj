@@ -19,6 +19,9 @@
 		EF16CB4E2A488295008B8138 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16CB4D2A488295008B8138 /* Triangle.swift */; };
 		EF16CB4F2A488295008B8138 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16CB4D2A488295008B8138 /* Triangle.swift */; };
 		EF16CB502A488295008B8138 /* Triangle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16CB4D2A488295008B8138 /* Triangle.swift */; };
+		EF16CB522A49D367008B8138 /* GameOverScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16CB512A49D367008B8138 /* GameOverScreen.swift */; };
+		EF16CB532A49D367008B8138 /* GameOverScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16CB512A49D367008B8138 /* GameOverScreen.swift */; };
+		EF16CB542A49D367008B8138 /* GameOverScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF16CB512A49D367008B8138 /* GameOverScreen.swift */; };
 		EF7FB81A2A3C7D0D002C9680 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7FB8192A3C7D0D002C9680 /* AppDelegate.swift */; };
 		EF7FB81C2A3C7D0D002C9680 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF7FB81B2A3C7D0D002C9680 /* GameViewController.swift */; };
 		EF7FB81F2A3C7D0D002C9680 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF7FB81D2A3C7D0D002C9680 /* Main.storyboard */; };
@@ -51,6 +54,7 @@
 		EF16CB452A45DD96008B8138 /* Confetti.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Confetti.sks; sourceTree = "<group>"; };
 		EF16CB462A45DD96008B8138 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = Extention/Assets.xcassets; sourceTree = "<group>"; };
 		EF16CB4D2A488295008B8138 /* Triangle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Triangle.swift; sourceTree = "<group>"; };
+		EF16CB512A49D367008B8138 /* GameOverScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScreen.swift; sourceTree = "<group>"; };
 		EF7FB8102A3C7D0B002C9680 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		EF7FB8112A3C7D0D002C9680 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF7FB8162A3C7D0D002C9680 /* Crown.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Crown.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -144,6 +148,7 @@
 				EF7FB85C2A40A3BC002C9680 /* Line.swift */,
 				EF7FB8582A40A053002C9680 /* People.swift */,
 				EF16CB4D2A488295008B8138 /* Triangle.swift */,
+				EF16CB512A49D367008B8138 /* GameOverScreen.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -302,6 +307,7 @@
 				EF7FB8592A40A053002C9680 /* People.swift in Sources */,
 				EF7FB86D2A42F1AB002C9680 /* Slider.swift in Sources */,
 				EF7FB86F2A4441B4002C9680 /* GameScene+ImpulsSlider.swift in Sources */,
+				EF16CB522A49D367008B8138 /* GameOverScreen.swift in Sources */,
 				EF7FB8662A40A654002C9680 /* GameScene+Lines.swift in Sources */,
 				EF16CB422A45C0FE008B8138 /* GameScene+ContactDelegate.swift in Sources */,
 				EF7FB8622A40A642002C9680 /* GameScene+Prince.swift in Sources */,
@@ -315,6 +321,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF7FB85E2A40A3BD002C9680 /* Line.swift in Sources */,
+				EF16CB532A49D367008B8138 /* GameOverScreen.swift in Sources */,
 				EF7FB85A2A40A053002C9680 /* People.swift in Sources */,
 				EF16CB432A45C0FE008B8138 /* GameScene+ContactDelegate.swift in Sources */,
 				EF7FB8672A40A654002C9680 /* GameScene+Lines.swift in Sources */,
@@ -329,6 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EF7FB85F2A40A3BD002C9680 /* Line.swift in Sources */,
+				EF16CB542A49D367008B8138 /* GameOverScreen.swift in Sources */,
 				EF7FB85B2A40A053002C9680 /* People.swift in Sources */,
 				EF16CB442A45C0FE008B8138 /* GameScene+ContactDelegate.swift in Sources */,
 				EF7FB8682A40A654002C9680 /* GameScene+Lines.swift in Sources */,
@@ -483,7 +491,7 @@
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -515,7 +523,7 @@
 				INFOPLIST_KEY_UIStatusBarHidden = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

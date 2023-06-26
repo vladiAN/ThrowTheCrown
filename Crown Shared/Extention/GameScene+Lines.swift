@@ -13,7 +13,7 @@ extension GameScene {
     
     func createVerticalLines() {
         let numberOfParalelsLines = 3
-        let startX = size.width / 4
+        let startX = size.width / 3
         var firstLineYPosition: CGFloat = 0
         
         for i in 0..<numberOfParalelsLines {
